@@ -1,44 +1,24 @@
-import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
-import Button from '../Button';
+import {connect} from 'react-redux'
+import Timer from './presenter'
+import {bindActionCreators} from 'redux'
+import {actionCreators as tomatoActions} from '../../reducer'
 
-class Timer extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle={"light-content"}/>
-        <View style={styles.upper}>
-            <Text style={styles.timer}>25:00</Text>
-        </View>
-        <View style={styles.lower}>
-            <Button iconName="play-circle" onPress={() => alert('it works play')}></Button>
-            <Button iconName="stop-circle" onPress={() => alert('it works stop')}></Button>
-        </View>
-      </View>
-    );
-  }
+function mapStateToProps(state) {
+    const {isPlaying, elapsedTime, timerDuration} = state
+    return {
+        isPlaying,
+        elapsedTime,
+        timerDuration
+    }
 }
 
-const styles = StyleSheet.create({
-  container: {
-      flex: 2,
-      backgroundColor: "#CE0B24"
-  },
-  upper: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center"
-  },
-  lower: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center"
-  },
-  timer: {
-      color: "white",
-      fontSize: 120,
-      fontWeight: "100"
-  }
-});
+function mapDispatchToProps(dispatch) {
+    return {
+        startTimer: bindActionCreators(tomatoActions.startTimer, dispatch),
+        restartTimer: bindActionCreators(tomatoActions.restartTimer, dispatch),
+        addSecond: bindActionCreators(tomatoActions.addSecond, dispatch)
+    }
+}
 
-export default Timer
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timer);
